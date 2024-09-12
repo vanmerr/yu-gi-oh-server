@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const cors = require("cors");
 const connect_mongodb = require('./configs/mongodb');
 const path = require('path');
+const http = require('http');
+const socket_server = require('./socket.io');
 
 
 dotenv.config();
@@ -21,6 +23,10 @@ app.use(cors());
 // connect mongodb
 connect_mongodb();
 
+// socket server
+const server = http.createServer(app);
+const io = socket_server(server);
+
 
 // Route để bắt đầu quá trình xử lý
 app.get('/', async (req, res) => {
@@ -28,6 +34,6 @@ app.get('/', async (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
